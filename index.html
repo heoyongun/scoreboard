@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .card {
+      margin: 1rem;
+      border-radius: 20px;
+      color: white;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card:nth-child(odd) {
+      background-color: #7FBFFF;
+    }
+    .card:nth-child(even) {
+      background-color: #7FFF7F;
+    }
+    button {
+      border: none;
+      background-color: transparent;
+      font-size: 1.5rem;
+      color: white;
+      border-radius: 50%;
+      padding: 0.25rem;
+    }
+    button:focus {
+      outline: none;
+    }
+    button:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+    button:active {
+      transform: scale(0.9);
+    }
+    .add-card-button {
+      display: block;
+      width: 200px;
+      height: 50px;
+      margin: 20px auto;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      font-size: 20px;
+      border: none;
+    }
+    .add-card-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row" id="card-row-1">
+      <!-- 첫 번째 row에 카드를 생성합니다. -->
+    </div>
+    <button class="add-card-button" onclick="addCard()">카드 추가</button>
+  </div>
+
+  <script>
+    var cardCount = 3;
+
+    function addCard() {
+      cardCount++;
+      var cardContainer;
+      // 카드가 3의 배수일 경우 새로운 row 생성
+      if (cardCount % 3 === 1) {
+        var newRow = document.createElement('div');
+        newRow.classList.add('row');
+        newRow.id = `card-row-${Math.ceil(cardCount / 3)}`;
+        document.querySelector('.container').insertBefore(newRow, document.querySelector('.add-card-button'));
+      }
+      cardContainer = document.getElementById(`card-row-${Math.ceil(cardCount / 3)}`);
+      var newCard = `
+        <div class="col-sm">
+          <div class="card">
+            <div class="card-header">
+              <h4>카드 ${cardCount}</h4>
+            </div>
+            <div class="card-body">
+              <p>내용 ${cardCount}</p>
+            </div>
+            <div class="card-footer">
+              <button onclick="decrementScore(${cardCount})">➖</button>
+              <p>스코어: <span id="score${cardCount}">0</span></p>
+              <button onclick="incrementScore(${cardCount})">➕</button
+                     </div>
+          </div>
+        </div>
+      `;
+      cardContainer.insertAdjacentHTML('beforeend', newCard);
+    }
+
+    function incrementScore(cardNumber) {
+      var scoreElement = document.getElementById('score' + cardNumber);
+      var score = parseInt(scoreElement.innerText, 10);
+      score++;
+      scoreElement.innerText = score;
+    }
+
+    function decrementScore(cardNumber) {
+      var scoreElement = document.getElementById('score' + cardNumber);
+      var score = parseInt(scoreElement.innerText, 10);
+      if(score > 0){
+        score--;
+        scoreElement.innerText = score;
+      }
+    }
+
+    // 페이지 로드 시 기본적으로 3개의 카드 생성
+    window.onload = function() {
+      for(let i = 1; i <= 3; i++) {
+        addCard();
+      }
+    }
+  </script>
+</body>
+</html>
